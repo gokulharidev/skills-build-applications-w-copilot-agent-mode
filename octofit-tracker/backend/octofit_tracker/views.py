@@ -1,19 +1,22 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from .serializers import UserSerializer, TeamSerializer, ActivitySerializer, LeaderboardSerializer, WorkoutSerializer
-from octofit_tracker.models import User, Team, Activity, Leaderboard, Workout
+from .models import User, Team, Activity, Leaderboard, Workout
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def api_root(request, format=None):
-    base_url = request.build_absolute_uri('/')
-    suffix = 'api/'
+    if request.method == 'POST':
+        return Response({"message": "POST request received"}, status=status.HTTP_201_CREATED)
+
+    base_url = '[fictional-rotary-phone-jjr7rp9xvxgwfrxx]'
     return Response({
-        'users': base_url + suffix + 'users/',
-        'teams': base_url + suffix + 'teams/',
-        'activities': base_url + suffix + 'activities/',
-        'leaderboard': base_url + suffix + 'leaderboard/',
-        'workouts': base_url + suffix + 'workouts/'
+        'users': base_url + 'api/users/?format=api',
+        'teams': base_url + 'api/teams/?format=api',
+        'activities': base_url + 'api/activities/?format=api',
+        'leaderboard': base_url + 'api/leaderboard/?format=api',
+        'workouts': base_url + 'api/workouts/?format=api'
     })
 
 class UserViewSet(viewsets.ModelViewSet):
